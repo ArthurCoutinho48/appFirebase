@@ -23,6 +23,18 @@ ion-item{
     margin-bottom: 16px;
 }
 
+.erroControl{
+    padding-top: -26px;
+    padding-bottom: 16px;
+
+    ion-text{
+        color: red;
+        font-weight: 300;
+        font-size: small;
+        padding-top: -16;
+    }
+}
+
 .forgotPassword{
     display: flex;
     justify-content: flex-end;
