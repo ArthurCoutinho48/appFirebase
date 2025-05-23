@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { User } from '@angular/fire/auth';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  onAuthStateChanged,
+  User
+} from '@angular/fire/auth';
 
 
 @Injectable({
@@ -9,30 +15,30 @@ import { User } from '@angular/fire/auth';
 })
 export class AutheticationService {
 
-  constructor(public ngFireAuth: AngularFireAuth) { }
+  constructor(public auth: Auth) { }
 
   // Registro de Usuário
   async registerUser(email:string, password:string){
-    return await this.ngFireAuth.createUserWithEmailAndPassword(email, password)
+    return await createUserWithEmailAndPassword(this.auth, email, password)
   }
 
   // Login
   async loginUser(email:string, password:string){
-    return await this.ngFireAuth.signInWithEmailAndPassword(email, password)
+    return await signInWithEmailAndPassword(this.auth, email, password)
   }
 
   // Recuperar Senha
   async resetPassword(email:string){
-    return await this.ngFireAuth.sendPasswordResetEmail(email)
+    return await sendPasswordResetEmail(this.auth, email)
   }
 
   async signOut(){
-    return await this.ngFireAuth.signOut()
+    return await signOut(this.auth)
   }
 
   async getProfile(){
     return new Promise<User | null> ((resolve, reject) => {
-      this.ngFireAuth.onAuthStateChanged (user =>{
+      onAuthStateChanged (this.auth, user =>{
         if(user){
           resolve(user as any)
         }else{

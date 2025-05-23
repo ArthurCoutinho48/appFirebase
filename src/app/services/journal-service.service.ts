@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AutheticationService } from './authetication.service';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, Firestore, query, where } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 export class Journal{
   id?:string;
@@ -22,19 +23,26 @@ export class Journal{
 })
 export class JournalServiceService {
 
-  userId:any;
-
-  constructor(private authService: AutheticationService, private firestore: Firestore) {
-    this.authService.getProfile().then(user => {
-      this.userId = user?.uid
-      console.log(this.userId);
-    })
+  constructor(
+    private authService: AutheticationService, 
+    private firestore: Firestore) {
   }
 
-  addJournal(jounal:Journal){
-    jounal.userId = this.userId;
+  async addJournal(jounal:Journal){
+    const user = await this.authService.getProfile();
+    if (!user?.uid) throw new Error('Usuário não autenticado.');
+
+    jounal.userId = user.uid;
 
     const journalRef = collection(this.firestore,"journals");
-    return addDoc(journalRef,jounal);
+    return addDoc(journalRef, jounal);
+  }
+
+  getJournals(userId:any): Observable<Journal[]>{
+    const journalRef = collection(this.firestore, "journals");
+    const refquery = query(journalRef, where('userId', '==', userId));
+
+    return collectionData(refquery, {idField:'id'}) as Observable<Journal[]>;
+
   }
 }
