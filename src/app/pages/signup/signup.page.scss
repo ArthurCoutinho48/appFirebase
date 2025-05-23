@@ -1,0 +1,47 @@
+.header{
+    margin-top: 100px;
+    margin-bottom: 80px;
+    text-align: center;
+    
+    .title{
+        font-size: 2rem;
+    }
+
+    .subTitle{
+        color: gray;
+        font-size: 0.9rem;
+    }
+}
+
+.input{
+    font-size: 300;
+}
+
+ion-item{
+    --background: #f1f1f1;
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.signinlink{
+    width: 80%;
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    
+
+    p{
+        font-size: 0.8rem;
+    }
+
+    a{
+        text-decoration: none;
+        color: #FFC33F;
+    }
+}
