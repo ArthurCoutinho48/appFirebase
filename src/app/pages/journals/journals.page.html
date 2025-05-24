@@ -7,14 +7,14 @@
 <ion-content [fullscreen]="true">
   <ion-grid>
     <ion-row>
-      <ion-col sizeLg="4" sizeMd="4" size="6" *ngFor="let journal of journals">
+      <ion-col sizeLg="4" sizeMd="4" size="6" *ngFor="let journal of journals" (click)="openJournal(journal)">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{journal.title}}</ion-card-title>
-            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+            <ion-card-title class="title">{{journal.title}}</ion-card-title>
+            <ion-card-subtitle color="secondary">Card Subtitle</ion-card-subtitle>
           </ion-card-header>
 
-          <ion-card-content>
+          <ion-card-content class="content">
             {{journal.content}}
           </ion-card-content>
         </ion-card>
@@ -22,14 +22,14 @@
     </ion-row>
   </ion-grid>
 
-  <ion-modal trigger="open-modal">
+  <ion-modal #modal [initialBreakpoint]="0.25" [breakpoints]="[0,0.25,0.5,0.75]" trigger="open-modal">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancel</ion-button>
           </ion-buttons>
-          <ion-title>Welcome</ion-title>
+          <ion-title>Add Journal</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
           </ion-buttons>

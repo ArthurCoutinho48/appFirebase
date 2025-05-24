@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonModal, ToastController } from '@ionic/angular';
+import { IonModal, ModalController, ToastController } from '@ionic/angular';
 import { AutheticationService } from 'src/app/services/authetication.service';
 import { Journal, JournalServiceService } from 'src/app/services/journal-service.service';
+import { JournalPage } from '../journal/journal.page';
 
 @Component({
   selector: 'app-journals',
@@ -20,7 +21,8 @@ export class JournalsPage implements OnInit {
   constructor(
     private authService: AutheticationService,
     private journalService: JournalServiceService,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController) { }
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
@@ -45,6 +47,16 @@ export class JournalsPage implements OnInit {
       })
       toast.present();
     })
+  }
+
+  async openJournal(journal:Journal){
+    const modal = await this.modalCtrl.create({
+      component: JournalPage,
+      componentProps: {id:journal.id},
+      breakpoints: [0,0.5,0.8],
+      initialBreakpoint: 0.6
+    })
+    await modal.present();
   }
 
   ngOnInit() {

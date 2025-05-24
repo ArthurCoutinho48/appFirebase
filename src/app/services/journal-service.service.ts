@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AutheticationService } from './authetication.service';
-import { addDoc, collection, collectionData, Firestore, query, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, docData, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 export class Journal{
@@ -44,5 +44,23 @@ export class JournalServiceService {
 
     return collectionData(refquery, {idField:'id'}) as Observable<Journal[]>;
 
+  }
+
+  getJournalById(id:any): Observable<Journal>{
+    const journalRef = doc(this.firestore, `journals/${id}`);
+
+    return docData(journalRef, {idField:'id'}) as Observable<Journal>;
+  }
+
+  updateJournal(journal:Journal){
+    const journalRef = doc(this.firestore, `journals/${journal.id}`);
+
+    return updateDoc(journalRef, {title:journal.title, content:journal.content})
+  }
+
+  removeJournal(id:any){
+    const journalRef = doc(this.firestore, `journals/${id}`);
+
+    return deleteDoc(journalRef)
   }
 }
