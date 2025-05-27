@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import { AutheticationService } from 'src/app/services/authetication.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Usado para trabalhar com formulários reativos
+import { Router } from '@angular/router'; // Usado para navegação entre páginas
+import { LoadingController } from '@ionic/angular'; // Usado para exibir um loading (carregando)
+import { AutheticationService } from 'src/app/services/authetication.service'; // Serviço de autenticação personalizado
 
 @Component({
   selector: 'app-signup',
@@ -12,53 +12,69 @@ import { AutheticationService } from 'src/app/services/authetication.service';
 })
 export class SignupPage implements OnInit {
   
+  // Declaração do formulário de cadastro (será inicializado no ngOnInit)
   regForm!: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public authService: AutheticationService, public router: Router) { }
+  // Injeção de dependências pelo construtor
+  constructor(
+    public formBuilder: FormBuilder,               // Criação do formulário reativo
+    public loadingCtrl: LoadingController,         // Exibição de loading (Ionic)
+    public authService: AutheticationService,      // Serviço de autenticação Firebase
+    public router: Router                          // Navegação entre páginas
+  ) {}
 
+  // Método que é chamado quando o componente é inicializado
   ngOnInit() {
+    // Criação do formulário com validações
     this.regForm = this.formBuilder.group({
       fullname: ['', [
-        Validators.required
+        Validators.required // Campo obrigatório
       ]],
       email: ['', [
-        Validators.required,
-        Validators.email,
-        Validators.pattern("[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"),
+        Validators.required, // Campo obrigatório
+        Validators.email, // Formato de e-mail válido
+        Validators.pattern("[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"), // Regex para validar e-mail
       ]],
       password: ['', [
-        Validators.required,
-        Validators.pattern("(?=.*\d)(?=.*[a-z])(?=.*[0-8])(?=.*[A-Z]).{8,}")
+        Validators.required, // Campo obrigatório
+        Validators.pattern("(?=.*\d)(?=.*[a-z])(?=.*[0-8])(?=.*[A-Z]).{8,}") // Senha com requisitos específicos
       ]],
-    })
+    });
   }
 
-  get errorControl(){
+  // Getter para facilitar o acesso aos controles do formulário no template
+  get errorControl() {
     return this.regForm?.controls;
   }
 
-  async signUp(){
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
+  // Método chamado ao enviar o formulário de cadastro
+  async signUp() {
+    const loading = await this.loadingCtrl.create(); // Cria o loading
+    await loading.present(); // Mostra o loading
 
-    if (this.regForm?.valid){
+    // Verifica se o formulário é válido
+    if (this.regForm?.valid) {
       const user = await this.authService.registerUser(
-        this.regForm.value.email, 
-        this.regForm.value.password
+        this.regForm.value.email, // Email do formulário
+        this.regForm.value.password // Senha do formulário
       ).catch((erro) => {
+        // Captura e exibe erros de registro
         console.log(erro);
-        loading.dismiss()
-      })
+        loading.dismiss(); // Fecha o loading
+      });
 
-      if (user){
-        loading.dismiss();
-        this.router.navigate(['/home']);
-      }else{
+      // Se o usuário foi criado com sucesso
+      if (user) {
+        loading.dismiss(); // Fecha o loading
+        this.router.navigate(['/home']); // Redireciona para a página inicial
+      } else {
+        // Mensagem de erro (poderia ser exibida para o usuário)
         console.log('provide correct values');
       }
     }
   }
 
+  // Getter para acesso direto ao campo fullname (útil no template)
   get fullname() {
     return this.regForm.get('fullname');
   }
