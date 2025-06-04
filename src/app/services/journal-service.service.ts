@@ -50,16 +50,17 @@ export class JournalServiceService {
     return addDoc(journalRef, jounal); // adiciona o diário ao Firestore
   }
 
+  // Retorna todos os diários de um determinado usuário (relação 1:N)
   getJournals(userId:any): Observable<Journal[]>{
-    const journalRef = collection(this.firestore, "journals");
-    const refquery = query(journalRef, where('userId', '==', userId));
+    const journalRef = collection(this.firestore, "journals"); // Referência à coleção
+    const refquery = query(journalRef, where('userId', '==', userId)); // Consulta filtrando por userId
 
-    return collectionData(refquery, {idField:'id'}) as Observable<Journal[]>;
+    return collectionData(refquery, {idField:'id'}) as Observable<Journal[]>; // Retorna os dados como array reativo
 
   }
 
   getJournalById(id:any): Observable<Journal>{
-    const journalRef = doc(this.firestore, `journals/${id}`);
+    const journalRef = doc(this.firestore, `journals/${id}`); //  Referência à coleção
 
     return docData(journalRef, {idField:'id'}) as Observable<Journal>;
   }
