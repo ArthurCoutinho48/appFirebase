@@ -59,21 +59,21 @@ export class JournalServiceService {
 
   }
 
+  // Retorna um diário específico pelo ID (consulta 1:1)
   getJournalById(id:any): Observable<Journal>{
-    const journalRef = doc(this.firestore, `journals/${id}`); //  Referência à coleção
-
-    return docData(journalRef, {idField:'id'}) as Observable<Journal>;
+    const journalRef = doc(this.firestore, `journals/${id}`); // Referência ao documento com ID específico
+    return docData(journalRef, {idField:'id'}) as Observable<Journal>; // Retorna o diário como Observable
   }
 
+  // Atualiza o título e conteúdo de um diário existente
   updateJournal(journal:Journal){
-    const journalRef = doc(this.firestore, `journals/${journal.id}`);
-
-    return updateDoc(journalRef, {title:journal.title, content:journal.content})
+    const journalRef = doc(this.firestore, `journals/${journal.id}`); // Referência ao documento
+    return updateDoc(journalRef, {title:journal.title, content:journal.content}); // Atualiza campos específicos
   }
 
+  // Remove um diário pelo ID
   removeJournal(id:any){
-    const journalRef = doc(this.firestore, `journals/${id}`);
-
-    return deleteDoc(journalRef)
+    const journalRef = doc(this.firestore, `journals/${id}`); // Referência ao documento
+    return deleteDoc(journalRef); // Exclui o documento do Firestore
   }
 }
